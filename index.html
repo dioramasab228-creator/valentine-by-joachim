@@ -252,7 +252,6 @@
             <p style="text-align: center; font-size: 0.85em; opacity: 0.8;">Une chanson pour nous ?</p>
             <input id="yt" placeholder="Lien YouTube (ou vide pour défaut)">
             <button class="btn-main" onclick="playYT()">Jouer la musique 🎵</button>
-            <iframe id="player" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -302,10 +301,10 @@
             if (!val) return alert("Et celui de ton amour ? 💖");
             
             let g = document.getElementById("gender").value;
-            // Musiques par défaut plus romantiques
-            if(g === "f") defaultSong = "https://www.youtube.com/embed/lp-EO5I6OHY?autoplay=1"; // John Legend
-            else if(g === "m") defaultSong = "https://www.youtube.com/embed/rtOvBOTyX00?autoplay=1"; // Christina Perri
-            else defaultSong = "https://www.youtube.com/embed/0yW7w8F2TVA?autoplay=1"; // Ed Sheeran
+            // Liens vers les musiques spécifiques
+            if(g === "f") defaultSong = "https://www.youtube.com/watch?v=Lp-EO5I6OHY"; // Tayc - Ma Lady
+            else if(g === "m") defaultSong = "https://www.youtube.com/watch?v=rtOvBOTyX00"; // Tems - Me & U
+            else defaultSong = "https://www.youtube.com/watch?v=0yW7w8F2TVA"; // Ed Sheeran par défaut
             
             document.getElementById("couple").innerText = 
                 `${document.getElementById("userName").value} 💍 ${val}`;
@@ -365,14 +364,11 @@
 
         function playYT() {
             let u = document.getElementById("yt").value.trim();
-            let id = "";
             if (u) {
-                if (u.includes("v=")) id = u.split("v=")[1].split("&")[0];
-                else if (u.includes("youtu.be/")) id = u.split("youtu.be/")[1].split("?")[0];
+                window.open(u, '_blank');
+            } else {
+                window.open(defaultSong, '_blank');
             }
-            const iframe = document.getElementById("player");
-            iframe.style.display = "block";
-            iframe.src = id ? `https://www.youtube.com/embed/${id}?autoplay=1` : defaultSong;
         }
 
         function startConfetti() {

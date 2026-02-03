@@ -299,10 +299,10 @@
             if (!val) return alert("Et celui de ton amour ? 💖");
             
             let g = document.getElementById("gender").value;
-            // Correction des liens : Tayc pour une femme, Tems pour un homme
-            if(g === "f") defaultSong = "https://www.youtube.com/watch?v=Lp-EO5I6OHY"; // Tayc - Ma Lady
-            else if(g === "m") defaultSong = "https://www.youtube.com/watch?v=ovv0Eunf76Q"; // Tems - Me & U (Official Video)
-            else defaultSong = "https://www.youtube.com/watch?v=lp-EO5I6OHY"; 
+            // Liens fournis par l'utilisateur (plus fiables)
+            if(g === "f") defaultSong = "https://youtu.be/7Ai7IrxO7Hg?si=tRqTIUu1W9Rg5MbQ"; // Tayc - Ma Lady
+            else if(g === "m") defaultSong = "https://youtu.be/1JltlSJH5bY?si=hZnS9VN9xw501vlF"; // Tems - Me & U
+            else defaultSong = "https://www.youtube.com/watch?v=0yW7w8F2TVA"; // Ed Sheeran - Perfect
             
             document.getElementById("couple").innerText = 
                 `${document.getElementById("userName").value} 💍 ${val}`;

@@ -368,10 +368,17 @@
 
         function playYT() {
             let u = document.getElementById("yt").value.trim();
-            if (u) {
-                window.open(u, '_blank');
+            const targetUrl = u ? u : defaultSong;
+            
+            if (targetUrl) {
+                // Création d'un lien temporaire pour simuler un clic utilisateur réel
+                const a = document.createElement('a');
+                a.href = targetUrl;
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                a.click();
             } else {
-                window.open(defaultSong, '_blank');
+                alert("Oups, je n'ai pas trouvé la musique ! ✨");
             }
         }
 

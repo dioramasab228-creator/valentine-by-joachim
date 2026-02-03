@@ -1,211 +1,392 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>yng.joach 💘</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yng.joach 💘 | Pour ma Valentine</title>
+    <!-- Importation des polices -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #ff4d6d;
+            --pink2: #ff8fab;
+            --bg1: #120818;
+            --bg2: #2a0a1f;
+            --text: #fbeff4;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
 
-<style>
-:root{
-  --pink:#ff4d6d;
-  --pink2:#ff8fab;
-  --bg1:#120818;
-  --bg2:#2a0a1f;
-  --text:#fbeff4;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Poppins,sans-serif;
-  background:linear-gradient(135deg,var(--bg1),var(--bg2));
-  color:var(--text);
-  height:100vh;
-  overflow:hidden;
-  display:flex;justify-content:center;align-items:center;
-}
-.page{
-  position:absolute;width:90%;max-width:430px;max-height:90vh;
-  background:linear-gradient(135deg,#3b0f2a,#220914);
-  border-radius:22px;padding:22px;
-  box-shadow:0 25px 50px rgba(0,0,0,.5);
-  opacity:0;transform:translateY(40px);
-  pointer-events:none;transition:.6s ease;overflow:hidden;
-}
-.page.active{opacity:1;transform:translateY(0);pointer-events:auto;}
-.scroll{max-height:60vh;overflow-y:auto;padding-right:6px;scroll-behavior:smooth;}
-h2{text-align:center;margin-top:0}
-input,select,button{width:100%;padding:12px;margin:8px 0;border-radius:14px;border:none;font-size:1em;}
-button{cursor:pointer;transition:.3s;}
-.btn-main{background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;}
-.btn-main:hover{transform:scale(1.05);}
-.choice{display:flex;gap:12px;margin-top:20px;}
-.btn-no{background:#444;color:white}
-.qcm{margin-bottom:18px}
-.qcm label{display:block;padding:10px;margin:6px 0;border-radius:14px;background:#3b0f2a;cursor:pointer;}
-.qcm input{display:none}
-.qcm input:checked + span{background:linear-gradient(135deg,var(--pink),var(--pink2));padding:10px;border-radius:14px;}
-.comp{opacity:.3;padding:14px;border-radius:14px;margin:10px 0;text-align:center;}
-.comp.active{opacity:1;background:linear-gradient(135deg,var(--pink),var(--pink2));}
-.soulmate{animation:glow 1.4s infinite alternate;}
-@keyframes glow{from{box-shadow:0 0 10px var(--pink);}to{box-shadow:0 0 30px var(--pink2);}}
-iframe{width:100%;border-radius:14px;border:none;display:none;}
-.confetti{position:fixed;width:8px;height:8px;border-radius:50%;pointer-events:none;animation:fall linear infinite;}
-@keyframes fall{to{transform:translateY(100vh) rotate(360deg)}}
-</style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at center, var(--bg2), var(--bg1));
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Arrière-plan animé */
+        #hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart-float {
+            position: absolute;
+            color: var(--pink);
+            opacity: 0.5;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .page {
+            position: absolute;
+            width: 90%;
+            max-width: 430px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+        }
+
+        .page.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+        }
+
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2em;
+            text-align: center;
+            margin-top: 0;
+            color: var(--pink2);
+            text-shadow: 0 0 10px rgba(255, 143, 171, 0.3);
+        }
+
+        .scroll {
+            max-height: 50vh;
+            overflow-y: auto;
+            padding-right: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--pink) transparent;
+        }
+
+        .scroll::-webkit-scrollbar { width: 5px; }
+        .scroll::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 10px; }
+
+        input, select, button {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border-radius: 16px;
+            border: none;
+            font-size: 1em;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input, select {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        button {
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-main {
+            background: linear-gradient(135deg, var(--pink), var(--pink2));
+            color: white;
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3);
+        }
+
+        .btn-main:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(255, 77, 109, 0.5); }
+        .btn-main:active { transform: scale(0.95); }
+
+        .choice { display: flex; gap: 15px; margin-top: 25px; position: relative; height: 60px; }
+        
+        #btn-no {
+            background: #444;
+            color: white;
+            position: absolute;
+            right: 0;
+            width: 45%;
+            margin: 0;
+            transition: all 0.2s ease;
+        }
+
+        #btn-yes { width: 50%; margin: 0; }
+
+        .qcm {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 18px;
+            margin-bottom: 15px;
+        }
+
+        .qcm p { margin: 0 0 10px 0; font-weight: 500; font-size: 0.95em; }
+
+        .qcm label {
+            display: block;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9em;
+        }
+
+        .qcm input { display: none; }
+        .qcm input:checked + span { color: var(--pink2); font-weight: 600; }
+        .qcm label:has(input:checked) { background: rgba(255, 77, 109, 0.15); border: 1px solid var(--pink); }
+
+        .comp {
+            padding: 20px;
+            border-radius: 20px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .soulmate { animation: glow 1.5s infinite alternate; }
+        @keyframes glow {
+            from { box-shadow: 0 0 10px var(--pink); border: 1px solid var(--pink); }
+            to { box-shadow: 0 0 25px var(--pink2); border: 1px solid var(--pink2); }
+        }
+
+        iframe { width: 100%; border-radius: 18px; border: none; margin-top: 15px; display: none; aspect-ratio: 16/9; }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 100;
+            animation: confetti-fall linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- PAGE 1 -->
-<div class="page active" id="p1">
-  <h2>💌 Ton prénom</h2>
-  <input id="userName" placeholder="Entre ton prénom">
-  <button class="btn-main" onclick="next1()">Continuer</button>
-</div>
+    <div id="hearts-container"></div>
 
-<!-- PAGE 2 -->
-<div class="page" id="p2">
-  <h2>💖 Son prénom</h2>
-  <input id="valName" placeholder="Prénom de ton/ta bien-aimé(e)">
-  <p>Quel est ton genre ?</p>
-  <select id="gender">
-    <option value="f">Je suis une femme</option>
-    <option value="m">Je suis un homme</option>
-    <option value="o">Autre</option>
-  </select>
-  <button class="btn-main" onclick="next2()">Continuer</button>
-</div>
+    <!-- PAGE 1 -->
+    <div class="page active" id="p1">
+        <h2>💌 Bienvenue...</h2>
+        <p style="text-align: center;">Comment t'appelles-tu ?</p>
+        <input id="userName" placeholder="Ton petit nom..." autocomplete="off">
+        <button class="btn-main" onclick="next1()">Suivant ✨</button>
+    </div>
 
-<!-- PAGE 3 -->
-<div class="page" id="p3">
-  <h2 id="couple"></h2>
-  <p>Veux-tu être ma/mon Valentine ? 💖</p>
-  <div class="choice">
-    <button class="btn-main" onclick="go(4)">Oui 😍</button>
-    <button class="btn-no" onmouseover="flee(this)">Non 😢</button>
-  </div>
-</div>
+    <!-- PAGE 2 -->
+    <div class="page" id="p2">
+        <h2>💖 Pour qui ?</h2>
+        <input id="valName" placeholder="Prénom de ton/ta chéri(e)" autocomplete="off">
+        <p style="text-align: center; font-size: 0.9em;">Tu es :</p>
+        <select id="gender">
+            <option value="f">Une femme 👗</option>
+            <option value="m">Un homme 👔</option>
+            <option value="o">Autre ✨</option>
+        </select>
+        <button class="btn-main" onclick="next2()">C'est parti !</button>
+    </div>
 
-<!-- PAGE 4 -->
-<div class="page" id="p4">
-  <h2>💘 Quiz de compatibilité</h2>
-  <div class="scroll" id="quiz"></div>
-  <button class="btn-main" onclick="submitQuiz()">Voir le résultat</button>
-</div>
+    <!-- PAGE 3 -->
+    <div class="page" id="p3">
+        <h2 id="couple"></h2>
+        <p style="text-align: center; font-size: 1.1em;">Veux-tu être ma Valentine ? 🌹</p>
+        <div class="choice">
+            <button class="btn-main" id="btn-yes" onclick="go(4)">OUI ! 😍</button>
+            <button id="btn-no" onmouseover="flee()" onclick="flee()">Non 😢</button>
+        </div>
+    </div>
 
-<!-- PAGE 5 -->
-<div class="page" id="p5">
-  <h2>💞 Résultat final</h2>
-  <div class="scroll">
+    <!-- PAGE 4 -->
+    <div class="page" id="p4">
+        <h2>💘 Test de Connexion</h2>
+        <div class="scroll" id="quiz"></div>
+        <button class="btn-main" onclick="submitQuiz()">Voir notre destin ✨</button>
+    </div>
 
-    <div class="comp" id="resultBox"></div>
+    <!-- PAGE 5 -->
+    <div class="page" id="p5">
+        <h2>💞 Notre Amour</h2>
+        <div class="scroll">
+            <div class="comp" id="resultBox"></div>
+            <p style="text-align: center; font-size: 0.85em; opacity: 0.8;">Une chanson pour nous ?</p>
+            <input id="yt" placeholder="Lien YouTube (ou vide pour défaut)">
+            <button class="btn-main" onclick="playYT()">Jouer la musique 🎵</button>
+            <iframe id="player" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
 
-    <p>🎵 Chanson par défaut</p>
-    <input id="yt" placeholder="Colle ton lien YouTube (optionnel)">
-    <button class="btn-main" onclick="playYT()">Lancer la musique</button>
+    <script>
+        let score = 0;
+        let defaultSong = "";
 
-    <iframe id="player" height="220"
-      allow="autoplay; encrypted-media"
-      allowfullscreen></iframe>
+        // Génération des cœurs en arrière-plan
+        const container = document.getElementById('hearts-container');
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = ['❤️', '💖', '💗', '💕', '🌸'][Math.floor(Math.random() * 5)];
+            heart.className = 'heart-float';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            container.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
 
-  </div>
-</div>
+        const questions = [
+            {q:"Votre rendez-vous idéal ?",o:[{t:"Dîner romantique aux chandelles",p:1},{t:"Balade main dans la main",p:1},{t:"Soirée jeux vidéo / Netflix",p:0},{t:"Sortie entre amis",p:0}]},
+            {q:"Ce qui compte le plus ?",o:[{t:"La complicité unique",p:1},{t:"La communication sincère",p:1},{t:"L'apparence physique",p:0},{t:"Les cadeaux",p:0}]},
+            {q:"Votre langage de l'amour ?",o:[{t:"Mots doux et compliments",p:1},{t:"Temps de qualité",p:1},{t:"Cadeaux matériels",p:0},{t:"Services rendus",p:0}]},
+            {q:"Moment préféré ensemble ?",o:[{t:"Longs câlins",p:1},{t:"Discussions profondes",p:1},{t:"Regarder chacun son téléphone",p:0},{t:"Dormir",p:0}]},
+            {q:"Un mot pour définir votre lien ?",o:[{t:"Éternel",p:1},{t:"Indestructible",p:1},{t:"Passager",p:0},{t:"Compliqué",p:0}]}
+        ];
 
-<script>
-let score=0;
-let defaultSong=""; // lien par défaut selon genre
+        function go(n) {
+            document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+            setTimeout(() => {
+                const target = document.getElementById("p" + n);
+                target.classList.add("active");
+                if(n === 5) startConfetti();
+            }, 50);
+        }
 
-const questions=[
- {q:"Votre rendez-vous idéal ?",o:[
-  {t:"Cinéma",p:1},{t:"Balade",p:1},{t:"Netflix",p:0},{t:"Jeux vidéo",p:0}]},
- {q:"Ce qui compte le plus ?",o:[
-  {t:"Respect",p:1},{t:"Communication",p:1},{t:"Argent",p:0},{t:"Popularité",p:0}]},
- {q:"Votre vibe de couple ?",o:[
-  {t:"Romantique",p:1},{t:"Complice",p:1},{t:"Libre",p:0},{t:"Indépendant",p:0}]},
- {q:"Moment préféré ensemble ?",o:[
-  {t:"Câlins",p:1},{t:"Discussions",p:1},{t:"Dormir",p:0},{t:"Téléphone",p:0}]},
- {q:"Un mot pour l’amour ?",o:[
-  {t:"Éternel",p:1},{t:"Sincère",p:1},{t:"Compliqué",p:0},{t:"Passager",p:0}]},
- {q:"Ce qui vous rapproche ?",o:[
-  {t:"Confiance",p:1},{t:"Soutien",p:1},{t:"Habitude",p:0},{t:"Chance",p:0}]}
-];
+        function next1() {
+            const name = document.getElementById("userName").value.trim();
+            if (!name) return alert("Dis-moi ton prénom... ✨");
+            go(2);
+        }
 
-function go(n){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById("p"+n).classList.add("active");
-}
+        function next2() {
+            const val = document.getElementById("valName").value.trim();
+            if (!val) return alert("Et celui de ton amour ? 💖");
+            
+            let g = document.getElementById("gender").value;
+            // Musiques par défaut plus romantiques
+            if(g === "f") defaultSong = "https://www.youtube.com/embed/lp-EO5I6OHY?autoplay=1"; // John Legend
+            else if(g === "m") defaultSong = "https://www.youtube.com/embed/rtOvBOTyX00?autoplay=1"; // Christina Perri
+            else defaultSong = "https://www.youtube.com/embed/0yW7w8F2TVA?autoplay=1"; // Ed Sheeran
+            
+            document.getElementById("couple").innerText = 
+                `${document.getElementById("userName").value} 💍 ${val}`;
+            loadQuiz();
+            go(3);
+        }
 
-function next1(){
-  if(!userName.value.trim()) return alert("Entre ton prénom");
-  go(2);
-}
+        function flee() {
+            const btn = document.getElementById("btn-no");
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            btn.style.position = "fixed";
+            btn.style.left = x + "px";
+            btn.style.top = y + "px";
+            btn.style.zIndex = "1000";
+        }
 
-function next2(){
-  if(!valName.value.trim()) return alert("Entre son prénom");
-  let g=document.getElementById("gender").value;
-  
-  // musique par défaut
-  if(g==="f") defaultSong="https://www.youtube.com/embed/7Ai7IrxO7Hg?autoplay=1&rel=0"; 
-  else if(g==="m") defaultSong="https://www.youtube.com/embed/a4UsBlhj30M?autoplay=1&rel=0"; 
-  else defaultSong="https://www.youtube.com/embed/7Ai7IrxO7Hg?autoplay=1&rel=0";
-  
-  document.getElementById("couple").innerText=
-     "💑 "+userName.value+" & "+valName.value;
-  loadQuiz();
-  go(3);
-}
+        function loadQuiz() {
+            let html = "";
+            questions.forEach((q, i) => {
+                html += `<div class="qcm"><p>${q.q}</p>`;
+                q.o.forEach((op, j) => {
+                    html += `<label><input type="radio" name="q${i}" value="${op.p}"><span>${op.t}</span></label>`;
+                });
+                html += "</div>";
+            });
+            document.getElementById("quiz").innerHTML = html;
+        }
 
-function flee(b){ b.style.transform=`translate(${Math.random()*80-40}px)`; }
+        function submitQuiz() {
+            let answered = 0;
+            score = 0;
+            questions.forEach((_, i) => {
+                let r = document.querySelector(`input[name=q${i}]:checked`);
+                if (r) {
+                    score += parseInt(r.value);
+                    answered++;
+                }
+            });
 
-function loadQuiz(){
-  let html="";
-  questions.forEach((q,i)=>{
-    html+=`<div class="qcm"><p>${q.q}</p>`;
-    q.o.forEach(op=>{
-      html+=`<label><input type="radio" name="q${i}" value="${op.p}"><span>${op.t}</span></label>`;
-    });
-    html+="</div>";
-  });
-  quiz.innerHTML=html;
-}
+            if(answered < questions.length) return alert("Réponds à toutes les questions pour voir notre destin ! ❤️");
+            
+            let percent = Math.round((score / questions.length) * 100);
+            let box = document.getElementById("resultBox");
+            box.className = "comp active";
+            
+            if (percent >= 80) {
+                box.innerHTML = `💎 Âmes Sœurs Pour Toujours (${percent}%)<br><small>Notre destin est écrit dans les étoiles.</small>`;
+                box.classList.add("soulmate");
+            } else if (percent >= 50) {
+                box.innerHTML = `🌹 Une Magnifique Connexion (${percent}%)<br><small>On est fait l'un pour l'autre.</small>`;
+            } else {
+                box.innerHTML = `🔥 Une Flamme à Entretenir (${percent}%)<br><small>L'amour est un défi qu'on relèvera ensemble.</small>`;
+            }
+            go(5);
+        }
 
-function submitQuiz(){
-  score=0;
-  questions.forEach((_,i)=>{
-    let r=document.querySelector(`input[name=q${i}]:checked`);
-    if(r) score+=parseInt(r.value);
-  });
-  
-  let percent=Math.round((score/questions.length)*100);
-  let box=document.getElementById("resultBox");
-  box.className="comp active";
-  
-  if(percent>=80){
-    box.innerText=`💖 Âmes sœurs (${percent}%)`;
-    box.classList.add("soulmate");
-  }
-  else if(percent>=50) box.innerText=`💕 Belle connexion (${percent}%)`;
-  else box.innerText=`💔 Compatibilité à construire (${percent}%)`;
-  
-  go(5);
-}
+        function playYT() {
+            let u = document.getElementById("yt").value.trim();
+            let id = "";
+            if (u) {
+                if (u.includes("v=")) id = u.split("v=")[1].split("&")[0];
+                else if (u.includes("youtu.be/")) id = u.split("youtu.be/")[1].split("?")[0];
+            }
+            const iframe = document.getElementById("player");
+            iframe.style.display = "block";
+            iframe.src = id ? `https://www.youtube.com/embed/${id}?autoplay=1` : defaultSong;
+        }
 
-function playYT(){
-  let u=document.getElementById("yt").value.trim();
-  let id="";
-  
-  if(u){
-    if(u.includes("v=")) id=u.split("v=")[1].split("&")[0];
-    else if(u.includes("youtu.be/")) id=u.split("youtu.be/")[1].split("?")[0];
-  }
-  
-  const iframe=document.getElementById("player");
-  iframe.style.display="block";
-  
-  if(id) iframe.src=`https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-  else iframe.src=defaultSong;
-}
-</script>
-
+        function startConfetti() {
+            for(let i = 0; i < 50; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.backgroundColor = ['#ff4d6d', '#ff8fab', '#ffb3c1', '#ffffff'][Math.floor(Math.random()*4)];
+                c.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                c.style.opacity = Math.random();
+                document.body.appendChild(c);
+                setTimeout(() => c.remove(), 3000);
+            }
+        }
+    </script>
 </body>
 </html>

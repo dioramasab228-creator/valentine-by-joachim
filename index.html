@@ -299,10 +299,10 @@
             if (!val) return alert("Et celui de ton amour ? 💖");
             
             let g = document.getElementById("gender").value;
-            // Liens vers les musiques spécifiques (Tayc pour elle, Tems pour lui)
+            // Correction des liens : Tayc pour une femme, Tems pour un homme
             if(g === "f") defaultSong = "https://www.youtube.com/watch?v=Lp-EO5I6OHY"; // Tayc - Ma Lady
-            else if(g === "m") defaultSong = "https://www.youtube.com/watch?v=rtOvBOTyX00"; // Tems - Me & U
-            else defaultSong = "https://www.youtube.com/watch?v=0yW7w8F2TVA"; // Ed Sheeran - Perfect
+            else if(g === "m") defaultSong = "https://www.youtube.com/watch?v=ovv0Eunf76Q"; // Tems - Me & U (Official Video)
+            else defaultSong = "https://www.youtube.com/watch?v=lp-EO5I6OHY"; 
             
             document.getElementById("couple").innerText = 
                 `${document.getElementById("userName").value} 💍 ${val}`;
@@ -312,18 +312,20 @@
 
         function flee() {
             const btn = document.getElementById("btn-no");
-            const margin = 20;
-            // On s'assure que le bouton reste dans la zone visible
-            const maxX = window.innerWidth - btn.offsetWidth - margin;
-            const maxY = window.innerHeight - btn.offsetHeight - margin;
+            const padding = 30; // Marge de sécurité accrue
             
-            const x = Math.max(margin, Math.random() * maxX);
-            const y = Math.max(margin, Math.random() * maxY);
+            // On calcule l'espace disponible réel
+            const maxX = Math.max(0, window.innerWidth - btn.offsetWidth - padding);
+            const maxY = Math.max(0, window.innerHeight - btn.offsetHeight - padding);
+            
+            // Génération de coordonnées aléatoires dans les limites
+            const x = Math.floor(Math.random() * (maxX - padding)) + padding;
+            const y = Math.floor(Math.random() * (maxY - padding)) + padding;
             
             btn.style.position = "fixed";
             btn.style.left = x + "px";
             btn.style.top = y + "px";
-            btn.style.zIndex = "1000";
+            btn.style.zIndex = "9999";
         }
 
         function loadQuiz() {

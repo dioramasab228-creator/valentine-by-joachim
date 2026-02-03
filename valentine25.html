@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yng.joach 💘</title>
+
+<style>
+:root{
+  --pink:#ff4d6d;
+  --pink2:#ff8fab;
+  --bg1:#120818;
+  --bg2:#2a0a1f;
+  --text:#fbeff4;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Poppins,sans-serif;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:var(--text);
+  height:100vh;
+  overflow:hidden;
+  display:flex;justify-content:center;align-items:center;
+}
+.page{
+  position:absolute;width:90%;max-width:430px;max-height:90vh;
+  background:linear-gradient(135deg,#3b0f2a,#220914);
+  border-radius:22px;padding:22px;
+  box-shadow:0 25px 50px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(40px);
+  pointer-events:none;transition:.6s ease;overflow:hidden;
+}
+.page.active{opacity:1;transform:translateY(0);pointer-events:auto;}
+.scroll{max-height:60vh;overflow-y:auto;padding-right:6px;scroll-behavior:smooth;}
+h2{text-align:center;margin-top:0}
+input,select,button{width:100%;padding:12px;margin:8px 0;border-radius:14px;border:none;font-size:1em;}
+button{cursor:pointer;transition:.3s;}
+.btn-main{background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;}
+.btn-main:hover{transform:scale(1.05);}
+.choice{display:flex;gap:12px;margin-top:20px;}
+.btn-no{background:#444;color:white}
+.qcm{margin-bottom:18px}
+.qcm label{display:block;padding:10px;margin:6px 0;border-radius:14px;background:#3b0f2a;cursor:pointer;}
+.qcm input{display:none}
+.qcm input:checked + span{background:linear-gradient(135deg,var(--pink),var(--pink2));padding:10px;border-radius:14px;}
+.comp{opacity:.3;padding:14px;border-radius:14px;margin:10px 0;text-align:center;}
+.comp.active{opacity:1;background:linear-gradient(135deg,var(--pink),var(--pink2));}
+.soulmate{animation:glow 1.4s infinite alternate;}
+@keyframes glow{from{box-shadow:0 0 10px var(--pink);}to{box-shadow:0 0 30px var(--pink2);}}
+iframe{width:100%;border-radius:14px;border:none;display:none;}
+.confetti{position:fixed;width:8px;height:8px;border-radius:50%;pointer-events:none;animation:fall linear infinite;}
+@keyframes fall{to{transform:translateY(100vh) rotate(360deg)}}
+</style>
+</head>
+
+<body>
+
+<!-- PAGE 1 -->
+<div class="page active" id="p1">
+  <h2>💌 Ton prénom</h2>
+  <input id="userName" placeholder="Entre ton prénom">
+  <button class="btn-main" onclick="next1()">Continuer</button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="p2">
+  <h2>💖 Son prénom</h2>
+  <input id="valName" placeholder="Prénom de ton/ta bien-aimé(e)">
+  <p>Quel est ton genre ?</p>
+  <select id="gender">
+    <option value="f">Je suis une femme</option>
+    <option value="m">Je suis un homme</option>
+    <option value="o">Autre</option>
+  </select>
+  <button class="btn-main" onclick="next2()">Continuer</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="p3">
+  <h2 id="couple"></h2>
+  <p>Veux-tu être ma/mon Valentine ? 💖</p>
+  <div class="choice">
+    <button class="btn-main" onclick="go(4)">Oui 😍</button>
+    <button class="btn-no" onmouseover="flee(this)">Non 😢</button>
+  </div>
+</div>
+
+<!-- PAGE 4 -->
+<div class="page" id="p4">
+  <h2>💘 Quiz de compatibilité</h2>
+  <div class="scroll" id="quiz"></div>
+  <button class="btn-main" onclick="submitQuiz()">Voir le résultat</button>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="p5">
+  <h2>💞 Résultat final</h2>
+  <div class="scroll">
+
+    <div class="comp" id="resultBox"></div>
+
+    <p>🎵 Chanson par défaut</p>
+    <input id="yt" placeholder="Colle ton lien YouTube (optionnel)">
+    <button class="btn-main" onclick="playYT()">Lancer la musique</button>
+
+    <iframe id="player" height="220"
+      allow="autoplay; encrypted-media"
+      allowfullscreen></iframe>
+
+  </div>
+</div>
+
+<script>
+let score=0;
+let defaultSong=""; // lien par défaut selon genre
+
+const questions=[
+ {q:"Votre rendez-vous idéal ?",o:[
+  {t:"Cinéma",p:1},{t:"Balade",p:1},{t:"Netflix",p:0},{t:"Jeux vidéo",p:0}]},
+ {q:"Ce qui compte le plus ?",o:[
+  {t:"Respect",p:1},{t:"Communication",p:1},{t:"Argent",p:0},{t:"Popularité",p:0}]},
+ {q:"Votre vibe de couple ?",o:[
+  {t:"Romantique",p:1},{t:"Complice",p:1},{t:"Libre",p:0},{t:"Indépendant",p:0}]},
+ {q:"Moment préféré ensemble ?",o:[
+  {t:"Câlins",p:1},{t:"Discussions",p:1},{t:"Dormir",p:0},{t:"Téléphone",p:0}]},
+ {q:"Un mot pour l’amour ?",o:[
+  {t:"Éternel",p:1},{t:"Sincère",p:1},{t:"Compliqué",p:0},{t:"Passager",p:0}]},
+ {q:"Ce qui vous rapproche ?",o:[
+  {t:"Confiance",p:1},{t:"Soutien",p:1},{t:"Habitude",p:0},{t:"Chance",p:0}]}
+];
+
+function go(n){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById("p"+n).classList.add("active");
+}
+
+function next1(){
+  if(!userName.value.trim()) return alert("Entre ton prénom");
+  go(2);
+}
+
+function next2(){
+  if(!valName.value.trim()) return alert("Entre son prénom");
+  let g=document.getElementById("gender").value;
+  
+  // musique par défaut
+  if(g==="f") defaultSong="https://www.youtube.com/embed/7Ai7IrxO7Hg?autoplay=1&rel=0"; 
+  else if(g==="m") defaultSong="https://www.youtube.com/embed/a4UsBlhj30M?autoplay=1&rel=0"; 
+  else defaultSong="https://www.youtube.com/embed/7Ai7IrxO7Hg?autoplay=1&rel=0";
+  
+  document.getElementById("couple").innerText=
+     "💑 "+userName.value+" & "+valName.value;
+  loadQuiz();
+  go(3);
+}
+
+function flee(b){ b.style.transform=`translate(${Math.random()*80-40}px)`; }
+
+function loadQuiz(){
+  let html="";
+  questions.forEach((q,i)=>{
+    html+=`<div class="qcm"><p>${q.q}</p>`;
+    q.o.forEach(op=>{
+      html+=`<label><input type="radio" name="q${i}" value="${op.p}"><span>${op.t}</span></label>`;
+    });
+    html+="</div>";
+  });
+  quiz.innerHTML=html;
+}
+
+function submitQuiz(){
+  score=0;
+  questions.forEach((_,i)=>{
+    let r=document.querySelector(`input[name=q${i}]:checked`);
+    if(r) score+=parseInt(r.value);
+  });
+  
+  let percent=Math.round((score/questions.length)*100);
+  let box=document.getElementById("resultBox");
+  box.className="comp active";
+  
+  if(percent>=80){
+    box.innerText=`💖 Âmes sœurs (${percent}%)`;
+    box.classList.add("soulmate");
+  }
+  else if(percent>=50) box.innerText=`💕 Belle connexion (${percent}%)`;
+  else box.innerText=`💔 Compatibilité à construire (${percent}%)`;
+  
+  go(5);
+}
+
+function playYT(){
+  let u=document.getElementById("yt").value.trim();
+  let id="";
+  
+  if(u){
+    if(u.includes("v=")) id=u.split("v=")[1].split("&")[0];
+    else if(u.includes("youtu.be/")) id=u.split("youtu.be/")[1].split("?")[0];
+  }
+  
+  const iframe=document.getElementById("player");
+  iframe.style.display="block";
+  
+  if(id) iframe.src=`https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+  else iframe.src=defaultSong;
+}
+</script>
+
+</body>
+</html>
